@@ -17,8 +17,10 @@ const filterPresenter = new FilterPresenter(
 
 const eventsModel = new MockService();
 
-const eventListPresenter = new EventListPresenter(
-  {container: eventListElement, eventsModel}
+const eventListPresenter = new EventListPresenter({
+  container: eventListElement,
+  eventsModel
+}
 );
 
 eventInfoPresenter.init();

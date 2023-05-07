@@ -4,16 +4,15 @@ import {CITIES, DESCRIPTION} from '../const.js';
 
 const generateDestination = () => {
   const city = getRandomArrayElement(CITIES);
-  const descr = getRandomArrayElement(DESCRIPTION);
 
   return {
     id: crypto.randomUUID(),
     name: city,
-    description: descr,
+    description: DESCRIPTION,
     picture: [
       {
         'src': `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`,
-        'description': `${city} ${descr}`
+        'description': `${city} description`
       }
     ]
   };
