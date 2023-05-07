@@ -13,4 +13,14 @@ const Price = {
   MAX: 600
 };
 
-export {POINT_TYPES, CITIES, DESCRIPTION, Price};
+const Duration = {
+  HOUR: 5,
+  DAY: 5,
+  MIN: 59
+};
+
+const DESTINATION_COUNT = 4;
+const OFFER_COUNT = 4;
+const POINT_COUNT = 4;
+
+export {POINT_TYPES, CITIES, DESCRIPTION, DESTINATION_COUNT, OFFER_COUNT, POINT_COUNT, Price, Duration};

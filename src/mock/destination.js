@@ -1,8 +1,8 @@
-import {getRandomArrayElement, getRandomInteger} from '../utils.js';
+import {getRandomArrayElement} from '../utils.js';
 import {CITIES, DESCRIPTION} from '../const.js';
 
 
-const getDestinationData = () => {
+const generateDestination = () => {
   const city = getRandomArrayElement(CITIES);
   const descr = getRandomArrayElement(DESCRIPTION);
 
@@ -19,4 +19,4 @@ const getDestinationData = () => {
   };
 };
 
-export {getDestinationData};
+export {generateDestination};

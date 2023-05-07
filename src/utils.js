@@ -7,6 +7,10 @@ const getRandomInteger = (min, max) => {
   return Math.round(rand);
 };
 
+function getRandomValue (items) {
+  return items[getRandomInteger(0, items.length - 1)];
+}
+
 const getTimeFromMins = (mins) => {
   if (mins < TIME_IN_MINUTES) {
     return `${mins}M`;
@@ -16,4 +20,4 @@ const getTimeFromMins = (mins) => {
   return `${hours}H ${minutes}M`;
 };
 
-export {getRandomArrayElement, getRandomInteger, getTimeFromMins};
+export {getRandomArrayElement, getRandomInteger, getTimeFromMins, getRandomValue};
