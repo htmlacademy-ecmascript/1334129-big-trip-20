@@ -4,29 +4,30 @@ import {EVENT_TYPES} from '../const.js';
 const MIN_PHOTO_INDEX = 1;
 const MAX_PHOTO_INDEX = 200;
 const PHOTO_URL = 'https://loremflickr.com/248/152?random=';
+const DESCRIPTIONS_PIC = [
+  'Lacinia luctus pulvi',
+  'Leo, sed tortor, in ex. Efficitur v',
+  'Velit morbi amet,',
+  'Velit morbi amet,',
+  'Imperdiet tempus '
+];
+
+const getPhoto = () => {
+  return {
+    src: `${PHOTO_URL}${getRandomInteger(MIN_PHOTO_INDEX, MAX_PHOTO_INDEX)}`,
+    description: `${DESCRIPTIONS_PIC}`
+  };
+};
+
+const getPhotosArray = () => {
+  return Array.from({length: getRandomInteger(0, 4)}, getPhoto);
+};
 
 const getDestinationData = (id, title, description) => ({
   id: id,
   title: title,
   description: description,
-  photos: [
-    {
-      src: `${PHOTO_URL}${getRandomInteger(MIN_PHOTO_INDEX, MAX_PHOTO_INDEX)}`,
-      description: 'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam'
-    },
-    {
-      src: `${PHOTO_URL}${getRandomInteger(MIN_PHOTO_INDEX, MAX_PHOTO_INDEX)}`,
-      description: 'Eu luctus nunc ante ut dui'
-    },
-    {
-      src: `${PHOTO_URL}${getRandomInteger(MIN_PHOTO_INDEX, MAX_PHOTO_INDEX)}`,
-      description: 'Sed sed nisi sed augue convallis suscipit in sed felis'
-    },
-    {
-      src: `${PHOTO_URL}${getRandomInteger(MIN_PHOTO_INDEX, MAX_PHOTO_INDEX)}`,
-      description: 'Aliquam erat volutpat'
-    }
-  ]
+  photos: getPhotosArray()
 });
 
 const getDestinations = () => [
