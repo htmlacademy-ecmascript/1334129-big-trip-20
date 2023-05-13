@@ -1,27 +1,26 @@
-import {getRandomArrayElement, getRandomInteger} from '../utils.js';
-import {EVENT_TYPES} from '../const.js';
+import {getRandomInteger} from '../utils.js';
 
 const MIN_PHOTO_INDEX = 1;
 const MAX_PHOTO_INDEX = 200;
-const PHOTO_URL = 'https://loremflickr.com/248/152?random=';
-const DESCRIPTIONS_PIC = [
-  'Lacinia luctus pulvi',
-  'Leo, sed tortor, in ex. Efficitur v',
-  'Velit morbi amet,',
-  'Velit morbi amet,',
-  'Imperdiet tempus '
-];
 
 const getPhoto = () => {
+  const PHOTO_URL = 'https://loremflickr.com/248/152?random=';
+  const DESCRIPTIONS_PIC = [
+    'Lacinia luctus pulvi',
+    'Leo, sed tortor, in ex. Efficitur v',
+    'Velit morbi amet,',
+    'Velit morbi amet,',
+    'Imperdiet tempus '
+  ];
+
   return {
     src: `${PHOTO_URL}${getRandomInteger(MIN_PHOTO_INDEX, MAX_PHOTO_INDEX)}`,
     description: `${DESCRIPTIONS_PIC}`
   };
 };
 
-const getPhotosArray = () => {
-  return Array.from({length: getRandomInteger(0, 4)}, getPhoto);
-};
+const getPhotosArray = () => Array.from({length:getRandomInteger(0, 4)}, getPhoto);
+
 
 const getDestinationData = (id, title, description) => ({
   id: id,
