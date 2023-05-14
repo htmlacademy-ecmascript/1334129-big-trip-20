@@ -12,8 +12,8 @@ const DESCRIPTIONS_PIC = [
 ];
 
 const getPhoto = () => ({
-    src: `${PHOTO_URL}${getRandomInteger(MIN_PHOTO_INDEX, MAX_PHOTO_INDEX)}`,
-    description: `${DESCRIPTIONS_PIC}`
+  src: `${PHOTO_URL}${getRandomInteger(MIN_PHOTO_INDEX, MAX_PHOTO_INDEX)}`,
+  description: `${DESCRIPTIONS_PIC}`
 });
 
 const getPhotosArray = () => Array.from({length:getRandomInteger(0, 4)}, getPhoto);
