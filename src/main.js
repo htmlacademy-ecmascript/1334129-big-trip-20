@@ -1,6 +1,7 @@
 import EventListPresenter from './presenter/event-list-presenter.js';
 import EventInfoPresenter from './presenter/event-info-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
+import EventsModel from './model/event-model.js';
 
 const eventListElement = document.querySelector('.trip-events');
 const eventInfoElement = document.querySelector('.trip-main');
@@ -10,13 +11,14 @@ const eventInfoPresenter = new EventInfoPresenter(
   {container: eventInfoElement}
 );
 
-const filterPresenter = new FilterPresenter(
-  {container: filterElement}
-);
+const filterPresenter = new FilterPresenter({container: filterElement});
 
-const eventListPresenter = new EventListPresenter(
-  {container: eventListElement}
-);
+const eventsModel = new EventsModel();
+
+const eventListPresenter = new EventListPresenter({
+  container: eventListElement,
+  eventsModel
+});
 
 eventInfoPresenter.init();
 filterPresenter.init();
