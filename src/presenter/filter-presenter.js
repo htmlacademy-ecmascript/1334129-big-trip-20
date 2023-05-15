@@ -1,7 +1,6 @@
 import FilterView from '../view/filter-view.js';
 import {render} from '../framework/render.js';
 
-
 export default class FilterPresenter {
   #container = null;
 
@@ -13,4 +12,3 @@ export default class FilterPresenter {
     render(new FilterView(), this.#container);
   }
 }
-

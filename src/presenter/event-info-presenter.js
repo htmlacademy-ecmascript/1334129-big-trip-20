@@ -12,4 +12,3 @@ export default class EventInfoPresenter {
     render(new EventInfoView(), this.#container, RenderPosition.AFTERBEGIN);
   }
 }
-

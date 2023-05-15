@@ -1,4 +1,3 @@
-// import {createElement} from '../framework/render.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 const createEventListTemlpate = () => '<ul class="trip-events__list">';

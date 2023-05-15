@@ -1,4 +1,3 @@
-// import {createElement} from '../framework/render.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import {getTimeFromMins} from '../utils.js';
 import dayjs from 'dayjs';
@@ -66,7 +65,6 @@ const createItemTemlpate = (event, destinations, availableOffers) => {
 
 export default class EventItemView extends AbstractView {
   #event = null;
-  #types = null;
   #destinations = null;
   #availableOffers = null;
 
@@ -79,8 +77,8 @@ export default class EventItemView extends AbstractView {
 
   get template() {
     return createItemTemlpate(
-      this.event,
-      this.destinations,
-      this.availableOffers);
+      this.#event,
+      this.#destinations,
+      this.#availableOffers);
   }
 }

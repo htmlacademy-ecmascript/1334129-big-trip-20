@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
 
 const createEventTypesTemplate = (types, selectedType) => {
-  console.log(types);
   let templateContent = '';
   for (const type of types) {
     templateContent +=
@@ -129,7 +128,6 @@ export default class EventEditView extends AbstractView {
 
   constructor({event, types, destinations, availableOffers}) {
     super();
-    console.log(types);
     this.#event = event;
     this.#types = types;
     this.#destinations = destinations;
