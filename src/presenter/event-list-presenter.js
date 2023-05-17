@@ -21,9 +21,8 @@ export default class EventListPresenter {
   }
 
   init() {
-    // this.#events = [...this.#eventsModel.events];
-    this.#events = 0;
-
+    this.#events = [...this.#eventsModel.events];
+    // this.#events = 0;
     this.#types = [...this.#eventsModel.types];
     this.#destinations = [...this.#eventsModel.destinations];
     this.#availableOffers = this.#eventsModel.offers;

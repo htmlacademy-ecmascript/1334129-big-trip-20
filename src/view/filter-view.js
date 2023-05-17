@@ -1,7 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
-// import {capitalize} from '../utils/point.js';
 
-const createFilterItem = (filter) => {
+function createFilterItem(filter) {
   return `
     <div class="trip-filters__filter">
       <input
@@ -20,7 +19,7 @@ const createFilterItem = (filter) => {
         </label>
     </div>
   `;
-};
+}
 
 const createFilterTemlpate = (filterItems) => {
   const filterItemsTemplate = filterItems
