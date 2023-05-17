@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {getTimeFromMins} from '../utils.js';
 import dayjs from 'dayjs';
 
@@ -63,28 +63,30 @@ const createItemTemlpate = (event, destinations, availableOffers) => {
   </li>`;
 };
 
-export default class EventItemView {
-  constructor({event, destinations, availableOffers}) {
-    this.event = event;
-    this.destinations = destinations;
-    this.availableOffers = availableOffers;
+export default class EventItemView extends AbstractView {
+  #event = null;
+  #destinations = null;
+  #availableOffers = null;
+  #onEditClick = null;
+
+  constructor({event, destinations, availableOffers, onEditClick}) {
+    super();
+    this.#event = event;
+    this.#destinations = destinations;
+    this.#availableOffers = availableOffers;
+    this.#onEditClick = onEditClick;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#EditClickHandler);
   }
 
-  getTemplate() {
+  get template() {
     return createItemTemlpate(
-      this.event,
-      this.destinations,
-      this.availableOffers);
+      this.#event,
+      this.#destinations,
+      this.#availableOffers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #EditClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onEditClick();
+  };
 }

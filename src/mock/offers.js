@@ -29,7 +29,8 @@ const getOffers = () => {
   ]);
   map.set('drive', [
     getOfferData(0, 'own', 'Own car', 10),
-    getOfferData(1, 'truck', 'Rent a truck', 200)
+    getOfferData(1, 'truck', 'Rent a truck', 200),
+    getOfferData(2, 'fridge', 'Car fridge', 15)
   ]);
   map.set('check-in', [
     getOfferData(0, 'ferryboat', 'Room reserve', 120),
