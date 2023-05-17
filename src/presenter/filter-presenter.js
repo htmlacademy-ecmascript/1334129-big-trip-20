@@ -1,14 +1,17 @@
 import FilterView from '../view/filter-view.js';
+import {generateFilters} from '../mock/filter.js';
 import {render} from '../framework/render.js';
 
 export default class FilterPresenter {
   #container = null;
+  #filters = null;
 
-  constructor({container}) {
+  constructor({container, eventsModel}) {
     this.#container = container;
+    this.#filters = generateFilters(eventsModel.events);
   }
 
   init() {
-    render(new FilterView(), this.#container);
+    render(new FilterView({filters: this.#filters}), this.#container);
   }
 }

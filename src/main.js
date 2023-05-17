@@ -11,9 +11,12 @@ const eventInfoPresenter = new EventInfoPresenter(
   {container: eventInfoElement}
 );
 
-const filterPresenter = new FilterPresenter({container: filterElement});
-
 const eventsModel = new EventsModel();
+
+const filterPresenter = new FilterPresenter({
+  container: filterElement,
+  eventsModel
+});
 
 const eventListPresenter = new EventListPresenter({
   container: eventListElement,
