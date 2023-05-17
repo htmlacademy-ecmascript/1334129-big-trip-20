@@ -1,4 +1,4 @@
-import {getRandomInteger} from '../utils.js';
+import {getRandomInteger} from '../utils/common.js';
 
 const MIN_PHOTO_INDEX = 1;
 const MAX_PHOTO_INDEX = 200;

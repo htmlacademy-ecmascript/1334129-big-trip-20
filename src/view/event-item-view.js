@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getTimeFromMins} from '../utils.js';
+import {getTimeFromMins} from '../utils/common.js';
 import dayjs from 'dayjs';
 
 const MAIN_DATE_FORMAT = 'MMM DD';
