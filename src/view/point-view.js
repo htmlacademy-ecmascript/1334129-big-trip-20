@@ -63,7 +63,7 @@ const createItemTemlpate = (event, destinations, availableOffers) => {
   </li>`;
 };
 
-export default class EventItemView extends AbstractView {
+export default class PointView extends AbstractView {
   #event = null;
   #destinations = null;
   #availableOffers = null;

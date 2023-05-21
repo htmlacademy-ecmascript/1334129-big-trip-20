@@ -1,12 +1,15 @@
 import SortView from '../view/sort-view.js';
 import EventListView from '../view/event-list-view.js';
-import EventItemView from '../view/event-item-view.js';
+import PointView from '../view/point-view.js';
 import EventEditView from '../view/event-edit-view.js';
 import {render, replace} from '../framework/render.js';
 import NoEventView from '../view/no-event-view.js';
 
-export default class EventListPresenter {
+export default class BoardPresenter {
   #eventListView = new EventListView();
+  #emptyListPoint = new NoEventView();
+  #pointShortingComponent = new SortView();
+
   #container = null;
   #eventsModel = null;
 
@@ -27,17 +30,9 @@ export default class EventListPresenter {
     this.#destinations = [...this.#eventsModel.destinations];
     this.#availableOffers = this.#eventsModel.offers;
 
-    if (!this.#events.length) {
-      render(new NoEventView(), this.#container);
-      return;
-    }
-
-    render(new SortView(), this.#container);
+    render(this.#pointShortingComponent, this.#container);
     render(this.#eventListView, this.#container);
-
-    for (let i = 0; i < this.#events.length; i++) {
-      this.#renderEvent(this.#events[i]);
-    }
+    this.#renderBoard();
   }
 
   #renderEvent(event) {
@@ -50,7 +45,7 @@ export default class EventListPresenter {
       onCloseClick: itemCloseClickHandler
     });
 
-    const itemView = new EventItemView({
+    const itemView = new PointView({
       event,
       types: this.#types,
       destinations: this.#destinations,
@@ -90,5 +85,15 @@ export default class EventListPresenter {
     }
 
     render(itemView, this.#eventListView.element);
+  }
+
+  #renderBoard() {
+    if (this.#events.length) {
+      for (let i = 0; i < this.#events.length; i++) {
+        this.#renderEvent(this.#events[i]);
+      }
+    } else {
+      render(this.#emptyListPoint, this.#container);
+    }
   }
 }
