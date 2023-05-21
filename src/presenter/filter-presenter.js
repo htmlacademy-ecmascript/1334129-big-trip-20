@@ -8,7 +8,7 @@ export default class FilterPresenter {
 
   constructor({container, eventsModel}) {
     this.#container = container;
-    this.#filters = generateFilters(eventsModel.events);
+    this.#filters = generateFilters(eventsModel.points);
   }
 
   init() {

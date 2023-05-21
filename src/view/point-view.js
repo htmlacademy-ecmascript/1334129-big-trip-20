@@ -25,8 +25,8 @@ const createOffersTemplate = (offers, availableOffers) => {
     templateContent;
 };
 
-const createItemTemlpate = (event, destinations, availableOffers) => {
-  const {type, destination, offers, startDate, endDate, price, isFavorite} = event;
+const createItemTemlpate = (point, destinations, availableOffers) => {
+  const {type, destination, offers, startDate, endDate, price, isFavorite} = point;
   const destinationData = destinations.find((value) => value.id === destination);
   const title = `${type} ${destinationData.title}`;
 
@@ -64,14 +64,14 @@ const createItemTemlpate = (event, destinations, availableOffers) => {
 };
 
 export default class PointView extends AbstractView {
-  #event = null;
+  #point = null;
   #destinations = null;
   #availableOffers = null;
   #onEditClick = null;
 
-  constructor({event, destinations, availableOffers, onEditClick}) {
+  constructor({point, destinations, availableOffers, onEditClick}) {
     super();
-    this.#event = event;
+    this.#point = point;
     this.#destinations = destinations;
     this.#availableOffers = availableOffers;
     this.#onEditClick = onEditClick;
@@ -80,7 +80,7 @@ export default class PointView extends AbstractView {
 
   get template() {
     return createItemTemlpate(
-      this.#event,
+      this.#point,
       this.#destinations,
       this.#availableOffers);
   }

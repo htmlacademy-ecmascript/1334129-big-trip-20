@@ -62,8 +62,8 @@ const createPhotoTemplate = (photos) => {
   return templateContent;
 };
 
-const createEventEditTemlpate = (event, types, destinations, availableOffers) => {
-  const {type, destination, offers, startDate, endDate, price} = event;
+const createEventEditTemlpate = (point, types, destinations, availableOffers) => {
+  const {type, destination, offers, startDate, endDate, price} = point;
   const destinationData = destinations.find((value) => value.id === destination);
 
   return `<li class="trip-events__item">
@@ -129,16 +129,16 @@ const createEventEditTemlpate = (event, types, destinations, availableOffers) =>
 };
 
 export default class EventEditView extends AbstractView {
-  #event = null;
+  #point = null;
   #types = null;
   #destinations = null;
   #availableOffers = null;
   #onSubmitClick = null;
   #onCloseClick = null;
 
-  constructor({event, types, destinations, availableOffers, onSubmitClick, onCloseClick}) {
+  constructor({point, types, destinations, availableOffers, onSubmitClick, onCloseClick}) {
     super();
-    this.#event = event;
+    this.#point = point;
     this.#types = types;
     this.#destinations = destinations;
     this.#availableOffers = availableOffers;
@@ -150,7 +150,7 @@ export default class EventEditView extends AbstractView {
 
   get template() {
     return createEventEditTemlpate(
-      this.#event,
+      this.#point,
       this.#types,
       this.#destinations,
       this.#availableOffers);
