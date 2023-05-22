@@ -6,12 +6,12 @@ import PointPresenter from './point-presenter.js';
 import {updateItem} from '../utils/common.js';
 
 export default class BoardPresenter {
+  #pointListComponent = new EventListView();
   #container = null;
   #eventsModel = null;
-  #pointListComponent = new EventListView();
-  #points = null;
   #pointShortingComponent = new SortView();
   #emptyListPoint = new NoEventView();
+  #points = null;
   #pointsPresenter = new Map();
 
   constructor({container, eventsModel}) {
@@ -26,16 +26,27 @@ export default class BoardPresenter {
 
   #handlePointChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
-
     this.#pointsPresenter.get(updatedPoint.id).init({
       point: updatedPoint,
-      eventsModel: this.eventsModel
+      eventsModel: this.#eventsModel
     });
   }
 
-  #renderShort() {
-    render(this.#pointShortingComponent, this.#container, RenderPosition.AFTERBEGIN);
+  #handleModeChange = () => {
+    this.#pointsPresenter.forEach((presenter) => presenter.resetView());
+  };
+
+  #renderNoPoints(){
+    render(this.#emptyListPoint, this.#container);
+  }
+
+  #renderSort() {
     render(this.#pointShortingComponent, this.#container);
+  }
+
+  #renderPointList() {
+    render(this.#pointListComponent, this.#container);
+    this.#points.forEach((point) => this.#renderPoint(point));
   }
 
   #renderPoint(point) {
@@ -51,34 +62,17 @@ export default class BoardPresenter {
     this.#pointsPresenter.set(point.id, pointPresenter);
   }
 
-  #renderNoPoints(){
-    render(this.#emptyListPoint, this.#container, RenderPosition.AFTERBEGIN);
-    render(this.#emptyListPoint, this.#container);
-  }
-
   #clearPointList() {
     this.#pointsPresenter.forEach((presenter) => presenter.destroy());
     this.#pointsPresenter.clear();
   }
 
-  #renderPointList() {
-    render(this.#pointListComponent, this.#container);
-  }
-
-  #handleModeChange = () => {
-    this.#pointsPresenter.forEach((presenter) => presenter.resetView());
-  };
-
   #renderBoard() {
-    if (this.#points.length) {
-      for (let i = 0; i < this.#points.length; i++) {
-        this.#renderPoint(this.#points[i]);
-      }
-    } else {
+    if (!this.#points.length) {
       this.#renderNoPoints();
       return;
     }
-    this.#renderShort();
+    this.#renderSort();
     this.#renderPointList();
   }
 }

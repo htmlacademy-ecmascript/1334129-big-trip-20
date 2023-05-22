@@ -2,6 +2,7 @@ import {getRandomArrayElement, getRandomInteger} from '../utils/common.js';
 import {EVENT_TYPES} from '../const.js';
 import dayjs from 'dayjs';
 import {getDestinations} from './destinations.js';
+import { nanoid } from 'nanoid';
 
 const MIN_EVENT_OFFERS = 0;
 const MAX_EVENT_OFFERS = 3;
@@ -23,6 +24,7 @@ const getMockEvent = () => {
   const maxMinutesToAdd = 500;
 
   return{
+    id: nanoid(),
     type: type,
     destination: getRandomInteger(MIN_MOCK_ID, getDestinations().length - 1),
     offers: offers,
