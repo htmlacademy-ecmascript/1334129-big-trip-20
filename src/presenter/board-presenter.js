@@ -10,9 +10,6 @@ export default class BoardPresenter {
   #eventsModel = null;
   #pointListComponent = new EventListView();
   #points = null;
-  #types = null;
-  #destinations = null;
-  #availableOffers = null;
   #pointShortingComponent = new SortView();
   #emptyListPoint = new NoEventView();
   #pointsPresenter = new Map();
@@ -24,36 +21,39 @@ export default class BoardPresenter {
 
   init() {
     this.#points = [...this.#eventsModel.points];
-    this.#types = [...this.#eventsModel.types];
-    this.#destinations = [...this.#eventsModel.destinations];
-    this.#availableOffers = this.#eventsModel.offers;
     this.#renderBoard();
   }
 
   #handlePointChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
-    this.#types = updateItem(this.#types, updatedPoint);
-    this.#destinations = updateItem(this.#destinations, updatedPoint);
-    this.#availableOffers = updateItem(this.#availableOffers, updatedPoint);
-    this.#pointsPresenter.get(updatedPoint.id).init(updatedPoint);
+
+    this.#pointsPresenter.get(updatedPoint.id).init({
+      point: updatedPoint,
+      eventsModel: this.eventsModel
+    });
   }
 
   #renderShort() {
     render(this.#pointShortingComponent, this.#container, RenderPosition.AFTERBEGIN);
+    render(this.#pointShortingComponent, this.#container);
   }
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
-      pointListContainer: this.#pointListComponent.element,
+      container: this.#pointListComponent.element,
       onDataChange: this.#handlePointChange,
       onModeChange: this.#handleModeChange,
     });
-    pointPresenter.init(point);
+    pointPresenter.init({
+      point,
+      eventsModel: this.#eventsModel
+    });
     this.#pointsPresenter.set(point.id, pointPresenter);
   }
 
   #renderNoPoints(){
     render(this.#emptyListPoint, this.#container, RenderPosition.AFTERBEGIN);
+    render(this.#emptyListPoint, this.#container);
   }
 
   #clearPointList() {

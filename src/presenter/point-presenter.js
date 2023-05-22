@@ -2,35 +2,35 @@ import {render, replace, remove} from '../framework/render.js';
 import PointView from '../view/point-view.js';
 import EventEditView from '../view/event-edit-view.js';
 
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
+// const Mode = {
+//   DEFAULT: 'DEFAULT',
+//   EDITING: 'EDITING',
+// };
 
 export default class PointPresenter {
   #pointComponent = null;
   #container = null;
   #pointEditComponent = null;
   #handleDataChange = null;
-  #handleModeChange = null;
+  // #handleModeChange = null;
 
   #point = null;
-  #mode = Mode.DEFAULT;
+  // #mode = Mode.DEFAULT;
   #types = null;
   #destinations = null;
   #availableOffers = null;
 
-  constructor({container, onDataChange, onModeChange}){
+  constructor({container, onDataChange}){
     this.#container = container;
     this.#handleDataChange = onDataChange;
-    this.#handleModeChange = onModeChange;
+    // this.#handleModeChange = onModeChange;
   }
 
-  init(point, types, destinations, availableOffers) {
+  init({point, eventsModel}) {
     this.#point = point;
-    this.#types = types;
-    this.#destinations = destinations;
-    this.#availableOffers = availableOffers;
+    this.#types = [...eventsModel.types];
+    this.#destinations = [...eventsModel.destinations];
+    this.#availableOffers = eventsModel.offers;
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
@@ -58,22 +58,22 @@ export default class PointPresenter {
       return;
     }
 
-    if(this.#mode === Mode.DEFAULT) {
-      replace(this.#pointComponent, prevPointComponent);
-    }
-    if(this.#mode === Mode.EDITING) {
-      replace(this.#pointEditComponent, prevPointEditComponent);
-    }
+    // if(this.#mode === Mode.DEFAULT) {
+    //   replace(this.#pointComponent, prevPointComponent);
+    // }
+    // if(this.#mode === Mode.EDITING) {
+    //   replace(this.#pointEditComponent, prevPointEditComponent);
+    // }
 
     remove(prevPointComponent);
     remove(prevPointEditComponent);
   }
 
-  resetView() {
-    if(this.#mode !== Mode.DEFAULT){
-      this.#replaceItemEditToView();
-    }
-  }
+  // resetView() {
+  //   if(this.#mode !== Mode.DEFAULT){
+  //     this.#replaceItemEditToView();
+  //   }
+  // }
 
   destroy(){
     remove(this.#pointComponent);
@@ -82,13 +82,13 @@ export default class PointPresenter {
 
   #replaceItemViewToEdit = () => {
     replace(this.#pointEditComponent, this.#pointComponent);
-    this.handleModeChange();
-    this.#mode = Mode.EDITING;
+    // this.handleModeChange();//board-presenter
+    // this.#mode = Mode.EDITING;
   };
 
   #replaceItemEditToView = () => {
     replace(this.#pointComponent, this.#pointEditComponent);
-    this.#mode = Mode.Default;
+    // this.#mode = Mode.Default;
   };
 
   #escKeyDownHandler = (evt) => {
@@ -116,7 +116,8 @@ export default class PointPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#point.isFavorite = !this.#point.isFavorite;
+    this.#handleDataChange(this.#point);
   };
 }
 
