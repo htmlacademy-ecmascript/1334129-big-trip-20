@@ -91,23 +91,23 @@ export default class PointPresenter {
       this.#replaceItemEditToView();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
-  }
+  };
 
   #itemEditClickHandler = () => {
     this.#replaceItemViewToEdit();
     document.addEventListener('keydown', this.#escKeyDownHandler);
-  }
+  };
 
   #itemSubmitClickHandler = (point) => {
     this.#handlePointChange(point);
     this.#replaceItemEditToView();
     document.addEventListener('keydown', this.#escKeyDownHandler);
-  }
+  };
 
-  #itemCloseClickHandler = () =>  {
+  #itemCloseClickHandler = () => {
     this.#replaceItemEditToView();
     document.addEventListener('keydown', this.#escKeyDownHandler);
-  }
+  };
 
   #handleFavoriteClick = () => {
     this.#handlePointChange({...this.#point, isFavorite: !this.#point.isFavorite});

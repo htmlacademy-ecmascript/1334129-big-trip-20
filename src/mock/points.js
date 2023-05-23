@@ -1,4 +1,4 @@
-import {getRandomArrayElement, getRandomInteger} from '../utils/common.js';
+import {getRandomArrayElement, getRandomInteger, getRandomBoolean} from '../utils/common.js';
 import {EVENT_TYPES} from '../const.js';
 import dayjs from 'dayjs';
 import {getDestinations} from './destinations.js';
@@ -9,11 +9,9 @@ const MAX_EVENT_OFFERS = 3;
 const MIN_MOCK_ID = 0;
 const MIN_PRICE = 10;
 const MAX_PRICE = 800;
-const MIDDLE_EVENT_PRICE = 400;
 const MOCK_DATA_QUANTITY = 4;
 
 const getRandomOfferId = () => getRandomInteger(MIN_EVENT_OFFERS, MAX_EVENT_OFFERS - 1);
-const getRandomBoolean = () => Math.random() >= 0.5;
 
 const getMockEvent = () => {
 
