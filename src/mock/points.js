@@ -13,6 +13,7 @@ const MIDDLE_EVENT_PRICE = 400;
 const MOCK_DATA_QUANTITY = 4;
 
 const getRandomOfferId = () => getRandomInteger(MIN_EVENT_OFFERS, MAX_EVENT_OFFERS - 1);
+const getRandomBoolean = () => Math.random() >= 0.5;
 
 const getMockEvent = () => {
 
@@ -31,7 +32,7 @@ const getMockEvent = () => {
     startDate: randomDate,
     endDate: dayjs(randomDate).add(getRandomInteger(1, maxMinutesToAdd), 'minute'),
     price: getRandomInteger(MIN_PRICE, MAX_PRICE),
-    isFavorite: getRandomInteger(MIN_PRICE, MAX_PRICE) > MIDDLE_EVENT_PRICE
+    isFavorite: getRandomBoolean()
   };
 };
 const mockEvents = () => Array.from({length: MOCK_DATA_QUANTITY}, getMockEvent);

@@ -53,7 +53,7 @@ export default class PointPresenter {
       return;
     }
 
-    if(this.#editMode) {
+    if(this.#container.contains(prevPointComponent.element)) {
       replace(this.#pointComponent, prevPointComponent);
     } else {
       replace(this.#pointEditComponent, prevPointEditComponent);
@@ -63,27 +63,27 @@ export default class PointPresenter {
     remove(prevPointEditComponent);
   }
 
+  destroy (){
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
+  }
+
   resetView() {
     if (this.#editMode) {
       this.#replaceItemEditToView();
     }
   }
 
-  destroy(){
-    remove(this.#pointComponent);
-    remove(this.#pointEditComponent);
-  }
-
-  #replaceItemViewToEdit = () => {
+  #replaceItemViewToEdit () {
     replace(this.#pointEditComponent, this.#pointComponent);
     this.#handleModeChange();
     this.#editMode = true;
-  };
+  }
 
-  #replaceItemEditToView = () => {
+  #replaceItemEditToView () {
     replace(this.#pointComponent, this.#pointEditComponent);
     this.#editMode = false;
-  };
+  }
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
@@ -104,14 +104,12 @@ export default class PointPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  #itemCloseClickHandler = (point)=>  {
+  #itemCloseClickHandler = () =>  {
     this.#replaceItemEditToView();
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   #handleFavoriteClick = () => {
-    this.#point.isFavorite = !this.#point.isFavorite;
-    this.#handlePointChange(this.#point);
+    this.#handlePointChange({...this.#point, isFavorite: !this.#point.isFavorite});
   };
 }
-

@@ -36,7 +36,7 @@ export default class BoardPresenter {
     this.#pointsPresenter.forEach((presenter) => presenter.resetView());
   };
 
-  #renderNoPoints(){
+  #renderNoPoints() {
     render(this.#emptyListPoint, this.#container);
   }
 
