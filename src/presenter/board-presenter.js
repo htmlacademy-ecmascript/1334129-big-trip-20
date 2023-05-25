@@ -9,7 +9,7 @@ export default class BoardPresenter {
   #pointListComponent = new EventListView();
   #container = null;
   #eventsModel = null;
-  #pointShortingComponent = new SortView();
+  #pointSortingComponent = new SortView();
   #emptyListPoint = new NoEventView();
   #points = null;
   #pointsPresenter = new Map();
@@ -41,7 +41,7 @@ export default class BoardPresenter {
   }
 
   #renderSort() {
-    render(this.#pointShortingComponent, this.#container);
+    render(this.#pointSortingComponent, this.#container);
   }
 
   #renderPointList() {
