@@ -16,7 +16,7 @@ const getRandomOfferId = () => getRandomInteger(MIN_EVENT_OFFERS, MAX_EVENT_OFFE
 const getMockEvent = () => {
 
   const type = getRandomArrayElement(EVENT_TYPES);
-  const offers = Array.from(new Set(Array.from({length: getRandomOfferId()}, getRandomOfferId)));
+  const offers = Array.from({length: getRandomOfferId()}, getRandomOfferId);
   const startDate = new Date('2022-04-01T00:00:00');
   const endDate = new Date('2024-08-31T23:59:59');
   const randomDate = new Date(startDate.getTime() + Math.random() * (dayjs(endDate).diff(startDate)));

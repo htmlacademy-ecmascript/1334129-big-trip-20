@@ -7,16 +7,20 @@ const MAIN_DATETIME_FORMAT = 'YYYY-MM-DD';
 const TIME_FORMAT = 'HH:mm';
 const SCHEDULE_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
 
-const createOffersTemplate = (offers, availableOffers) => {
+const createOffersTemplate = (offerData) => {
   let templateContent = '';
-  for (const offer of offers) {
-    const offerData = availableOffers.find((value) => value.id === offer);
-    templateContent +=
-    `<li class="event__offer">
-      <span class="event__offer-title">${offerData.description}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${offerData.price}</span>
-    </li>`;
+  // console.log(offerData);
+  if (offerData) {
+    console.log('123');
+    for (const offer of offerData) {
+      // console.log(offer);
+      templateContent +=
+      `<li class="event__offer">
+        <span class="event__offer-title">${offerData.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offerData.price}</span>
+      </li>`;
+    }
   }
   return templateContent ?
     `<ul class="event__selected-offers">
@@ -25,10 +29,10 @@ const createOffersTemplate = (offers, availableOffers) => {
     templateContent;
 };
 
-const createItemTemlpate = (point, destinations, availableOffers) => {
-  const {type, destination, offers, startDate, endDate, price, isFavorite} = point;
-  const destinationData = destinations.find((value) => value.id === destination);
-  const title = `${type} ${destinationData.title}`;
+const createItemTemlpate = (point, endpoint, offerData) => {
+  const {type, startDate, endDate, price, isFavorite} = point;
+  // const destinationData = destinations.find((value) => value.id === destination);
+  const title = `${type} ${endpoint.title}`;
 
   return `<li class="trip-events__item">
     <div class="event">
@@ -49,7 +53,7 @@ const createItemTemlpate = (point, destinations, availableOffers) => {
         &euro;&nbsp;<span class="event__price-value">${price}</span>
       </p>
       <h4 class="visually-hidden">Offers:</h4>
-      ${createOffersTemplate(offers, availableOffers.get(type))}
+      ${createOffersTemplate(offerData)}
       <button class="event__favorite-btn  ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -65,15 +69,15 @@ const createItemTemlpate = (point, destinations, availableOffers) => {
 
 export default class PointView extends AbstractView {
   #point = null;
-  #destinations = null;
+  #destination = null;
   #availableOffers = null;
   #onEditClick = null;
   #onFavoriteClick = null;
 
-  constructor({point, destinations, availableOffers, onEditClick, onFavoriteClick}) {
+  constructor({point, destination, availableOffers, onEditClick, onFavoriteClick}) {
     super();
     this.#point = point;
-    this.#destinations = destinations;
+    this.#destination = destination;
     this.#availableOffers = availableOffers;
     this.#onEditClick = onEditClick;
     this.#onFavoriteClick = onFavoriteClick;
@@ -84,7 +88,7 @@ export default class PointView extends AbstractView {
   get template() {
     return createItemTemlpate(
       this.#point,
-      this.#destinations,
+      this.#destination,
       this.#availableOffers);
   }
 

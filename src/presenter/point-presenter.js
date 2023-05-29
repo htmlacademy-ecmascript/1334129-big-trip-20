@@ -26,24 +26,26 @@ export default class PointPresenter {
     this.#types = [...eventsModel.types];
     this.#destinations = [...eventsModel.destinations];
     this.#availableOffers = eventsModel.offers;
-
+    // console.log(eventsModel.offers);
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
-    this.#pointEditComponent = new EventEditView({
-      point: this.#point,
-      types: this.#types,
-      destinations: this.#destinations,
-      availableOffers: this.#availableOffers,
-      onSubmitClick: this.#itemSubmitClickHandler,
-      onCloseClick: this.#itemCloseClickHandler
-    });
+    // this.#pointEditComponent = new EventEditView({
+    //   point: this.#point,
+    //   types: this.#types,
+    //   destinations: this.#destinations,
+    //   availableOffers: this.#availableOffers,
+    //   onSubmitClick: this.#itemSubmitClickHandler,
+    //   onCloseClick: this.#itemCloseClickHandler
+    // });
 
     this.#pointComponent = new PointView({
       point: this.#point,
       types: this.#types,
-      destinations: this.#destinations,
-      availableOffers: this.#availableOffers,
+      // destinations: this.#destinations,
+      destination: this.getCurrentDestination(this.#point.destination),
+      // availableOffers: this.#availableOffers,
+      availableOffers: this.getCurrentOffers(this.#point.type, this.#point.offers),
       onEditClick: this.#itemEditClickHandler,
       onFavoriteClick: this.#handleFavoriteClick,
     });
@@ -66,6 +68,28 @@ export default class PointPresenter {
   destroy (){
     remove(this.#pointComponent);
     remove(this.#pointEditComponent);
+  }
+
+  getCurrentDestination(destination) {
+    return this.#destinations.find((value) => value.id === destination);
+  }
+
+  getCurrentOffers(type, offers) {
+    let offerData = [];
+    // console.log(offers);
+    for (const offer of this.#availableOffers) {
+      // offerData = offer.offers.find((value) => value.id === offer);
+
+      if (offer.type === type) {
+    // offerData = offer.offers;
+        offerData = offer.offers.find((value) => offers.indexOf(value.id) !== -1);
+      // console.log(type, offerData, offer.type);
+
+        break
+      }
+    }
+    console.log(offerData);
+    return offerData;
   }
 
   resetView() {
