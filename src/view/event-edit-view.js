@@ -17,18 +17,8 @@ const createEventTypesTemplate = (types, selectedType) => {
 };
 
 const createDestinationsTemplate = (destinations) => {
-  console.log(destinations);
   let templateContent = '';
   for (const destination of destinations) {
-  // console.log(destination);
-  // console.log(destination);
-  // for (const destination of destinations) {
-  //   templateContent += `<option value="${destination.title}"></option>`;
-  // }
-    // console.log(destination);
-  // for (const destination of destinations) {
-  //   templateContent += `<option value="${destination.title}"></option>`;
-  // }
 
     templateContent += `<option value="${destination.title}"></option>`;
   }
@@ -36,7 +26,6 @@ const createDestinationsTemplate = (destinations) => {
 };
 
 const createOffersTemplate = (availableOffers, selectedOffers) => {
-  console.log(selectedOffers);
   let templateContent = '';
   if (availableOffers.length === 0) {
     return templateContent;
@@ -75,7 +64,6 @@ const createPhotoTemplate = (photos) => {
 };
 
 const createEventEditTemlpate = (point, types, destinations, offerData) => {
-  console.log(destinations);
   const {type, destination, offers, startDate, endDate, price} = point;
   const destinationData = destinations.find((value) => value.id === destination);
 

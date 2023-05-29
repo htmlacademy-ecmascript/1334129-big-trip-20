@@ -9,6 +9,7 @@ export default class PointPresenter {
   #handlePointChange = null;
   #handleModeChange = null;
   #editMode = false;
+  #offersByType = [];
 
   #point = null;
   #types = null;
@@ -26,30 +27,25 @@ export default class PointPresenter {
     this.#types = [...eventsModel.types];
     this.#destinations = [...eventsModel.destinations];
     this.#availableOffers = eventsModel.offers;
-    // console.log(eventsModel.offers);
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
+
+    this.#pointComponent = new PointView({
+      point: this.#point,
+      types: this.#types,
+      destination: this.getCurrentDestination(this.#point.destination),
+      availableOffers: this.getCurrentOffers(this.#point.type, this.#point.offers),
+      onEditClick: this.#itemEditClickHandler,
+      onFavoriteClick: this.#handleFavoriteClick,
+    });
 
     this.#pointEditComponent = new EventEditView({
       point: this.#point,
       types: this.#types,
       destinations: this.#destinations,
-      // destination: this.getCurrentDestination(this.#point.destination),
-      // availableOffers: this.#availableOffers,
-      availableOffers: this.getCurrentOffers(this.#point.type, this.#point.offers),
+      availableOffers: this.#offersByType.offers || [],
       onSubmitClick: this.#itemSubmitClickHandler,
       onCloseClick: this.#itemCloseClickHandler
-    });
-
-    this.#pointComponent = new PointView({
-      point: this.#point,
-      types: this.#types,
-      // destinations: this.#destinations,
-      destination: this.getCurrentDestination(this.#point.destination),
-      // availableOffers: this.#availableOffers,
-      availableOffers: this.getCurrentOffers(this.#point.type, this.#point.offers),
-      onEditClick: this.#itemEditClickHandler,
-      onFavoriteClick: this.#handleFavoriteClick,
     });
 
     if(prevPointComponent === null || prevPointEditComponent === null) {
@@ -77,13 +73,14 @@ export default class PointPresenter {
   }
 
   getCurrentOffers(type, offers) {
-    let offerData = [];
+    // let offerData = [];
+    const offerData = [];
 
     if (this.#availableOffers && offers) {
-      const offersByType = this.#availableOffers.find((item) => item.type === type);
+      this.#offersByType = this.#availableOffers.find((item) => item.type === type);
 
-      if (offersByType) {
-        offersByType.offers.forEach((value) => {
+      if (this.#offersByType.offers) {
+        this.#offersByType.offers.forEach((value) => {
           if (offers.includes(value.id)) {
             offerData.push(value);
           }
