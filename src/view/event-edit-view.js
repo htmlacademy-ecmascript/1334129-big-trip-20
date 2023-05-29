@@ -24,9 +24,9 @@ const createEventTypesTemplate = (types, selectedType) => {
 //   return templateContent;
 // };
 
-const createDestinationsTemplate = (destinations) => {
+const createDestinationsTemplate = (destination) => {
   let templateContent = '';
-  // console.log(destinations);
+  // console.log(destination);
   // for (const destination of destinations) {
   //   templateContent += `<option value="${destination.title}"></option>`;
   // }
@@ -73,14 +73,14 @@ const createPhotoTemplate = (photos) => { //должно работать
 };
 
 const createEventEditTemlpate = (point, types, endpoint, offerData) => {
-  // console.log(endpoint);
+  console.log(endpoint);
   // console.log(offerData);
   // console.log(point);
   // console.log(types);
   // console.log(endpoint.photos);
-  const {type, offers, startDate, endDate, price} = point;
+  const {type, destination, offers, startDate, endDate, price} = point;
   // const destinationData = destinations.find((value) => value.id === destination);
-
+  // console.log(offerData);
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
@@ -105,7 +105,7 @@ const createEventEditTemlpate = (point, types, endpoint, offerData) => {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${endpoint.title}" list="destination-list-1">
           <datalist id="destination-list-1">
-            ${createDestinationsTemplate(endpoint)}
+            ${createDestinationsTemplate(destination)}
           </datalist>
         </div>
 
