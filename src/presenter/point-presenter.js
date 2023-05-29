@@ -33,8 +33,8 @@ export default class PointPresenter {
     this.#pointEditComponent = new EventEditView({
       point: this.#point,
       types: this.#types,
-      // destinations: this.#destinations,
-      destination: this.getCurrentDestination(this.#point.destination),
+      destinations: this.#destinations,
+      // destination: this.getCurrentDestination(this.#point.destination),
       // availableOffers: this.#availableOffers,
       availableOffers: this.getCurrentOffers(this.#point.type, this.#point.offers),
       onSubmitClick: this.#itemSubmitClickHandler,
