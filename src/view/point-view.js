@@ -9,16 +9,14 @@ const SCHEDULE_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
 
 const createOffersTemplate = (offerData) => {
   let templateContent = '';
-  // console.log(offerData);
+
   if (offerData) {
-    console.log('123');
     for (const offer of offerData) {
-      // console.log(offer);
       templateContent +=
       `<li class="event__offer">
-        <span class="event__offer-title">${offerData.title}</span>
+        <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offerData.price}</span>
+        <span class="event__offer-price">${offer.price}</span>
       </li>`;
     }
   }
@@ -32,6 +30,8 @@ const createOffersTemplate = (offerData) => {
 const createItemTemlpate = (point, endpoint, offerData) => {
   const {type, startDate, endDate, price, isFavorite} = point;
   // const destinationData = destinations.find((value) => value.id === destination);
+  // console.log(endpoint);
+  // console.log(offerData);
   const title = `${type} ${endpoint.title}`;
 
   return `<li class="trip-events__item">

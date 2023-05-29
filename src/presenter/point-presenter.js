@@ -30,14 +30,16 @@ export default class PointPresenter {
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
-    // this.#pointEditComponent = new EventEditView({
-    //   point: this.#point,
-    //   types: this.#types,
-    //   destinations: this.#destinations,
-    //   availableOffers: this.#availableOffers,
-    //   onSubmitClick: this.#itemSubmitClickHandler,
-    //   onCloseClick: this.#itemCloseClickHandler
-    // });
+    this.#pointEditComponent = new EventEditView({
+      point: this.#point,
+      types: this.#types,
+      // destinations: this.#destinations,
+      destination: this.getCurrentDestination(this.#point.destination),
+      // availableOffers: this.#availableOffers,
+      availableOffers: this.getCurrentOffers(this.#point.type, this.#point.offers),
+      onSubmitClick: this.#itemSubmitClickHandler,
+      onCloseClick: this.#itemCloseClickHandler
+    });
 
     this.#pointComponent = new PointView({
       point: this.#point,
@@ -76,19 +78,19 @@ export default class PointPresenter {
 
   getCurrentOffers(type, offers) {
     let offerData = [];
-    // console.log(offers);
-    for (const offer of this.#availableOffers) {
-      // offerData = offer.offers.find((value) => value.id === offer);
 
-      if (offer.type === type) {
-    // offerData = offer.offers;
-        offerData = offer.offers.find((value) => offers.indexOf(value.id) !== -1);
-      // console.log(type, offerData, offer.type);
+    if (this.#availableOffers && offers) {
+      const offersByType = this.#availableOffers.find((item) => item.type === type);
 
-        break
+      if (offersByType) {
+        offersByType.offers.forEach((value) => {
+          if (offers.includes(value.id)) {
+            offerData.push(value);
+          }
+        });
       }
     }
-    console.log(offerData);
+
     return offerData;
   }
 
