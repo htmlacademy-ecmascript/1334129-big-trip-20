@@ -59,7 +59,7 @@ export default class BoardPresenter {
     this.#sortEvents(sortType);
     this.#clearPointList();
     this.#renderPointList();
-  }
+  };
 
   #sortEvents(sortType) {
     switch (sortType) {
