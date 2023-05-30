@@ -19,6 +19,7 @@ const createEventTypesTemplate = (types, selectedType) => {
 const createDestinationsTemplate = (destinations) => {
   let templateContent = '';
   for (const destination of destinations) {
+
     templateContent += `<option value="${destination.title}"></option>`;
   }
   return templateContent;
@@ -36,9 +37,9 @@ const createOffersTemplate = (availableOffers, selectedOffers) => {
   for (const offer of availableOffers) {
     const checked = selectedOffers.includes(offer.id) ? 'checked' : '';
     templateContent += `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.name}-1" type="checkbox" name="event-offer-${offer.name}" ${checked}>
-      <label class="event__offer-label" for="event-offer-${offer.name}-1">
-        <span class="event__offer-title">${offer.description}</span>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-1" type="checkbox" name="event-offer-${offer.title}" ${checked}>
+      <label class="event__offer-label" for="event-offer-${offer.title}-1">
+        <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
       </label>
@@ -62,8 +63,8 @@ const createPhotoTemplate = (photos) => {
   return templateContent;
 };
 
-const createEventEditTemlpate = (event, types, destinations, availableOffers) => {
-  const {type, destination, offers, startDate, endDate, price} = event;
+const createEventEditTemlpate = (point, types, destinations, offerData) => {
+  const {type, destination, offers, startDate, endDate, price} = point;
   const destinationData = destinations.find((value) => value.id === destination);
 
   return `<li class="trip-events__item">
@@ -117,7 +118,7 @@ const createEventEditTemlpate = (event, types, destinations, availableOffers) =>
         </button>
       </header>
       <section class="event__details">
-        ${createOffersTemplate(availableOffers.get(type), offers)}
+        ${createOffersTemplate(offerData, offers)}
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${destinations[destination].description}</p>
@@ -129,39 +130,39 @@ const createEventEditTemlpate = (event, types, destinations, availableOffers) =>
 };
 
 export default class EventEditView extends AbstractView {
-  #event = null;
+  #point = null;
   #types = null;
   #destinations = null;
   #availableOffers = null;
   #onSubmitClick = null;
   #onCloseClick = null;
 
-  constructor({event, types, destinations, availableOffers, onSubmitClick, onCloseClick}) {
+  constructor({point, types, destinations, availableOffers, onSubmitClick, onCloseClick}) {
     super();
-    this.#event = event;
+    this.#point = point;
     this.#types = types;
     this.#destinations = destinations;
     this.#availableOffers = availableOffers;
     this.#onSubmitClick = onSubmitClick;
     this.#onCloseClick = onCloseClick;
-    this.element.querySelector('.event__save-btn').addEventListener('click', this.#SubmitClickHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#CloseClickHandler);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeClickHandler);
   }
 
   get template() {
     return createEventEditTemlpate(
-      this.#event,
+      this.#point,
       this.#types,
       this.#destinations,
       this.#availableOffers);
   }
 
-  #SubmitClickHandler = (evt) => {
+  #submitClickHandler = (evt) => {
     evt.preventDefault();
-    this.#onSubmitClick();
+    this.#onSubmitClick(this.#point);
   };
 
-  #CloseClickHandler = (evt) => {
+  #closeClickHandler = (evt) => {
     evt.preventDefault();
     this.#onCloseClick();
   };
