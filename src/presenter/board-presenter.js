@@ -4,15 +4,19 @@ import {render} from '../framework/render.js';
 import NoEventView from '../view/no-event-view.js';
 import PointPresenter from './point-presenter.js';
 import {updateItem} from '../utils/common.js';
+import {sortByDate, sortByTime, sortByPrice} from '../utils/sort.js';
+import {SortType} from '../const.js';
 
 export default class BoardPresenter {
   #pointListComponent = new EventListView();
   #container = null;
   #eventsModel = null;
-  #pointSortingComponent = new SortView();
+  // #pointSortingComponent = new SortView();
+  #pointSortingComponent = null; //SortView
   #emptyListPoint = new NoEventView();
   #points = null;
   #pointsPresenter = new Map();
+  #currentSortType = null;
 
   constructor({container, eventsModel}) {
     this.#container = container;
@@ -41,7 +45,35 @@ export default class BoardPresenter {
   }
 
   #renderSort() {
+    this.#pointSortingComponent = new SortView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
     render(this.#pointSortingComponent, this.#container);
+    this.#sortEvents(SortType.DAY);
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortEvents(sortType);
+    this.#clearPointList();
+    this.#renderPointList();
+  }
+
+  #sortEvents(sortType) {
+    switch (sortType) {
+      case SortType.DAY:
+        this.#points.sort(sortByDate);
+        break;
+      case SortType.TIME:
+        this.#points.sort(sortByTime);
+        break;
+      case SortType.PRICE:
+        this.#points.sort(sortByPrice);
+    }
+
+    this.#currentSortType = sortType;
   }
 
   #renderPointList() {
