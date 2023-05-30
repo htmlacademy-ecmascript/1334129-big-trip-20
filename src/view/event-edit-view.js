@@ -37,7 +37,7 @@ const createOffersTemplate = (availableOffers, selectedOffers) => {
   for (const offer of availableOffers) {
     const checked = selectedOffers.includes(offer.id) ? 'checked' : '';
     templateContent += `<div class="event__offer-selector">
-    <input class="event__offer-checkbox visually-hidden" id="event-offer-${offer.name}-1" type="checkbox" name="event-offer-${offer.name}" data-offer-name="${offer.name}" ${checked}>
+    <input class="event__offer-checkbox visually-hidden" id="event-offer-${offer.title}-1" type="checkbox" name="event-offer-${offer.title}" data-offer-title="${offer.title}" ${checked}>
       <label class="event__offer-label" for="event-offer-${offer.title}-1">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
@@ -130,7 +130,6 @@ const createEventEditTemlpate = (point, types, destinations, offerData) => {
 };
 
 export default class EventEditView extends AbstractStatefulView {
-  // #point = null;
   #types = null;
   #destinations = null;
   #availableOffers = null;
@@ -139,22 +138,18 @@ export default class EventEditView extends AbstractStatefulView {
 
   constructor({point, types, destinations, availableOffers, onSubmitClick, onCloseClick}) {
     super();
-    // this.#point = point;
     this._setState(EventEditView.parseEventToState(point));
     this.#types = types;
     this.#destinations = destinations;
     this.#availableOffers = availableOffers;
     this.#onSubmitClick = onSubmitClick;
     this.#onCloseClick = onCloseClick;
-    // this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitClickHandler);
-    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeClickHandler);
     this._restoreHandlers();
 
   }
 
   get template() {
     return createEventEditTemlpate(
-      // this.#point,
       this._state,
       this.#types,
       this.#destinations,
@@ -191,8 +186,9 @@ export default class EventEditView extends AbstractStatefulView {
 
   #offerChangeHandler = (evt) => {
     evt.preventDefault();
-    const availableOffers = this.#availableOffers.get(this._state.type);
-    const offer = availableOffers.find((value) => value.name === evt.target.dataset.offerName);
+
+    const offer = this.#availableOffers.find((value) => {
+      return value.title === evt.target.dataset.offerTitle;});
     if (!offer) {
       return;
     }
@@ -219,7 +215,6 @@ export default class EventEditView extends AbstractStatefulView {
 
   #submitClickHandler = (evt) => {
     evt.preventDefault();
-    // this.#onSubmitClick(this.#point);
     this.#onSubmitClick(EventEditView.parseStateToEvent(this._state));
   };
 
