@@ -187,8 +187,7 @@ export default class EventEditView extends AbstractStatefulView {
   #offerChangeHandler = (evt) => {
     evt.preventDefault();
 
-    const offer = this.#availableOffers.find((value) => {
-      return value.title === evt.target.dataset.offerTitle;});
+    const offer = this.#availableOffers.find((value) => value.title === evt.target.dataset.offerTitle);
     if (!offer) {
       return;
     }
