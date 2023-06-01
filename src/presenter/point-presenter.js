@@ -43,7 +43,7 @@ export default class PointPresenter {
       point: this.#point,
       types: this.#types,
       destinations: this.#destinations,
-      availableOffers: this.#offersByType.offers || [],
+      availableOffers: this.#availableOffers,
       onSubmitClick: this.#itemSubmitClickHandler,
       onCloseClick: this.#itemCloseClickHandler
     });
@@ -72,16 +72,16 @@ export default class PointPresenter {
     return this.#destinations.find((value) => value.id === destination);
   }
 
-  getCurrentOffers(type, offers) {
+  getCurrentOffers(type, offerIds) {
     // let offerData = [];
     const offerData = [];
 
-    if (this.#availableOffers && offers) {
+    if (this.#availableOffers && offerIds) {
       this.#offersByType = this.#availableOffers.find((item) => item.type === type);
 
       if (this.#offersByType.offers) {
         this.#offersByType.offers.forEach((value) => {
-          if (offers.includes(value.id)) {
+          if (offerIds.includes(value.id)) {
             offerData.push(value);
           }
         });

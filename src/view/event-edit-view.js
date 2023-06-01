@@ -27,14 +27,14 @@ const createDestinationsTemplate = (destinations) => {
 
 const createOffersTemplate = (availableOffers, selectedOffers) => {
   let templateContent = '';
-  if (availableOffers.length === 0) {
+  if (availableOffers.offers.length === 0) {
     return templateContent;
   }
   templateContent += `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">`;
 
-  for (const offer of availableOffers) {
+  for (const offer of availableOffers.offers) {
     const checked = selectedOffers.includes(offer.id) ? 'checked' : '';
     templateContent += `<div class="event__offer-selector">
     <input class="event__offer-checkbox visually-hidden" id="event-offer-${offer.title}-1" type="checkbox" name="event-offer-${offer.title}" data-offer-title="${offer.title}" ${checked}>
@@ -66,6 +66,7 @@ const createPhotoTemplate = (photos) => {
 const createEventEditTemlpate = (point, types, destinations, offerData) => {
   const {type, destination, offers, startDate, endDate, price} = point;
   const destinationData = destinations.find((value) => value.id === destination);
+  const _offers = offerData.find((value) => value.type === point.type);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -118,7 +119,7 @@ const createEventEditTemlpate = (point, types, destinations, offerData) => {
         </button>
       </header>
       <section class="event__details">
-        ${createOffersTemplate(offerData, offers)}
+        ${createOffersTemplate(_offers, offers)}
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${destinations[destination].description}</p>
@@ -141,7 +142,7 @@ export default class EventEditView extends AbstractStatefulView {
     this._setState(EventEditView.parseEventToState(point));
     this.#types = types;
     this.#destinations = destinations;
-    this.#availableOffers = availableOffers;
+    this.#availableOffers = availableOffers; // не приявязанные к точке офферы
     this.#onSubmitClick = onSubmitClick;
     this.#onCloseClick = onCloseClick;
     this._restoreHandlers();
@@ -187,7 +188,9 @@ export default class EventEditView extends AbstractStatefulView {
   #offerChangeHandler = (evt) => {
     evt.preventDefault();
 
-    const offer = this.#availableOffers.find((value) => value.title === evt.target.dataset.offerTitle);
+    const data = this.#availableOffers.find((value) => value.type === this._state.type);
+    const offer = data.offers.find((value) => value.title === evt.target.dataset.offerTitle);
+
     if (!offer) {
       return;
     }
