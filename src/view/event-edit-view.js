@@ -1,5 +1,7 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import dayjs from 'dayjs';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
 
@@ -136,6 +138,8 @@ export default class EventEditView extends AbstractStatefulView {
   #availableOffers = null;
   #onSubmitClick = null;
   #onCloseClick = null;
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
   constructor({point, types, destinations, availableOffers, onSubmitClick, onCloseClick}) {
     super();
@@ -157,6 +161,19 @@ export default class EventEditView extends AbstractStatefulView {
       this.#availableOffers);
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
+  }
+
   _restoreHandlers() {
     this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitClickHandler);
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeClickHandler);
@@ -164,7 +181,52 @@ export default class EventEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelectorAll('.event__offer-checkbox').forEach((value) => value.addEventListener('change', this.#offerChangeHandler));
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
+    this.#setDatepickers();
   }
+
+  #setDatepickers = () => {
+    const [dateStartElement, dateEndElement] = this.element.querySelectorAll('.event__input--time');
+    this.#datepickerStart = flatpickr(
+      dateStartElement,
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.startDate,
+        onClose: this.#dateStartChangeHandler,
+        enableTime: true,
+        maxDate: this._state.endDate,
+        locale: {
+          firstDayOfWeek: 1
+        },
+        'time_24hr': true
+      }
+    );
+    this.#datepickerEnd = flatpickr(
+      dateEndElement,
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.endDate,
+        onClose: this.#dateEndChangeHandler,
+        enableTime: true,
+        minDate: this._state.startDate,
+        locale: {
+          firstDayOfWeek: 1
+        },
+        'time_24hr': true
+      }
+    );
+  };
+
+  #dateStartChangeHandler = ([userDate]) => {
+    this._setState({
+      startDate: userDate,
+    });
+  };
+
+  #dateEndChangeHandler = ([userDate]) => {
+    this._setState({
+      endDate: userDate,
+    });
+  };
 
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
@@ -202,8 +264,7 @@ export default class EventEditView extends AbstractStatefulView {
         }
       }
     } else {
-      offers = [...this._state.offers];
-      offers.push(offer.id);
+      offers = [...this._state.offers, offer.id];
     }
     this._setState({offers});
   };

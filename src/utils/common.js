@@ -1,4 +1,5 @@
 const HOUR_DURATION = 60;
+const DAY_DURATION = 24;
 
 const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
 
@@ -11,9 +12,14 @@ const getTimeFromMins = (mins) => {
   if (mins < HOUR_DURATION) {
     return `${mins}M`;
   }
-  const hours = Math.trunc(mins / HOUR_DURATION);
+  let hours = Math.trunc(mins / HOUR_DURATION);
   const minutes = mins % HOUR_DURATION;
-  return `${hours}H ${minutes}M`;
+  if (hours < DAY_DURATION) {
+    return `${hours}H ${minutes}M`;
+  }
+  const days = Math.trunc(hours / DAY_DURATION);
+  hours = hours % DAY_DURATION;
+  return `${days}D ${hours}H ${minutes}M`;
 };
 
 const getRandomBoolean = () => Math.random() >= 0.5;
