@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import dayjs from 'dayjs';
 
 const DATE_FORMAT = 'DD/MM/YY HH:mm';
@@ -10,7 +10,7 @@ const createEventTypesTemplate = (types, selectedType) => {
     `<div class="event__type-item">
       <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}"
       ${selectedType === type ? 'checked' : ''}>
-      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
+      <label class="event__type-label  event__type-label--${type}" data-event-type="${type}" for="event-type-${type}-1">${type}</label>
     </div>`;
   }
   return templateContent;
@@ -20,24 +20,24 @@ const createDestinationsTemplate = (destinations) => {
   let templateContent = '';
   for (const destination of destinations) {
 
-    templateContent += `<option value="${destination.title}"></option>`;
+    templateContent += `<option value="${destination.title}">`;
   }
   return templateContent;
 };
 
 const createOffersTemplate = (availableOffers, selectedOffers) => {
   let templateContent = '';
-  if (availableOffers.length === 0) {
+  if (availableOffers.offers.length === 0) {
     return templateContent;
   }
   templateContent += `<section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">`;
 
-  for (const offer of availableOffers) {
+  for (const offer of availableOffers.offers) {
     const checked = selectedOffers.includes(offer.id) ? 'checked' : '';
     templateContent += `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-1" type="checkbox" name="event-offer-${offer.title}" ${checked}>
+    <input class="event__offer-checkbox visually-hidden" id="event-offer-${offer.title}-1" type="checkbox" name="event-offer-${offer.title}" data-offer-title="${offer.title}" ${checked}>
       <label class="event__offer-label" for="event-offer-${offer.title}-1">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
@@ -66,6 +66,7 @@ const createPhotoTemplate = (photos) => {
 const createEventEditTemlpate = (point, types, destinations, offerData) => {
   const {type, destination, offers, startDate, endDate, price} = point;
   const destinationData = destinations.find((value) => value.id === destination);
+  const _offers = offerData.find((value) => value.type === point.type);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -118,7 +119,7 @@ const createEventEditTemlpate = (point, types, destinations, offerData) => {
         </button>
       </header>
       <section class="event__details">
-        ${createOffersTemplate(offerData, offers)}
+        ${createOffersTemplate(_offers, offers)}
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${destinations[destination].description}</p>
@@ -129,8 +130,7 @@ const createEventEditTemlpate = (point, types, destinations, offerData) => {
   </li>`;
 };
 
-export default class EventEditView extends AbstractView {
-  #point = null;
+export default class EventEditView extends AbstractStatefulView {
   #types = null;
   #destinations = null;
   #availableOffers = null;
@@ -139,31 +139,97 @@ export default class EventEditView extends AbstractView {
 
   constructor({point, types, destinations, availableOffers, onSubmitClick, onCloseClick}) {
     super();
-    this.#point = point;
+    this._setState(EventEditView.parseEventToState(point));
     this.#types = types;
     this.#destinations = destinations;
-    this.#availableOffers = availableOffers;
+    this.#availableOffers = availableOffers; // не приявязанные к точке офферы
     this.#onSubmitClick = onSubmitClick;
     this.#onCloseClick = onCloseClick;
-    this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitClickHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeClickHandler);
+    this._restoreHandlers();
+
   }
 
   get template() {
     return createEventEditTemlpate(
-      this.#point,
+      this._state,
       this.#types,
       this.#destinations,
       this.#availableOffers);
   }
 
+  _restoreHandlers() {
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeClickHandler);
+    this.element.querySelectorAll('.event__type-label').forEach((value) => value.addEventListener('click', this.#typeChangeHandler));
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelectorAll('.event__offer-checkbox').forEach((value) => value.addEventListener('change', this.#offerChangeHandler));
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
+  }
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      type: evt.target.dataset.eventType,
+      offers: []
+    });
+  };
+
+  #destinationChangeHandler = (evt) => {
+    evt.preventDefault();
+    const destinationData = this.#destinations.find((value) => value.title === evt.target.value);
+    if (!destinationData) {
+      return;
+    }
+    this.updateElement({
+      destination: destinationData.id,
+    });
+  };
+
+  #offerChangeHandler = (evt) => {
+    evt.preventDefault();
+
+    const data = this.#availableOffers.find((value) => value.type === this._state.type);
+    const offer = data.offers.find((value) => value.title === evt.target.dataset.offerTitle);
+
+    if (!offer) {
+      return;
+    }
+    let offers = [];
+    if (this._state.offers.includes(offer.id)) {
+      for (let i = 0; i < this._state.offers.length; i++) {
+        if (this._state.offers[i] !== offer.id) {
+          offers.push(this._state.offers[i]);
+        }
+      }
+    } else {
+      offers = [...this._state.offers];
+      offers.push(offer.id);
+    }
+    this._setState({offers});
+  };
+
+  #priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      price: evt.target.value,
+    });
+  };
+
   #submitClickHandler = (evt) => {
     evt.preventDefault();
-    this.#onSubmitClick(this.#point);
+    this.#onSubmitClick(EventEditView.parseStateToEvent(this._state));
   };
 
   #closeClickHandler = (evt) => {
     evt.preventDefault();
     this.#onCloseClick();
   };
+
+  static parseEventToState(event) {
+    return {...event};
+  }
+
+  static parseStateToEvent(state) {
+    return {...state};
+  }
 }
