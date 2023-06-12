@@ -1,29 +1,20 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-function createFilterItem(filter) {
-  return `
-    <div class="trip-filters__filter">
-      <input
-        id="filter-${filter.type}"
-        class="trip-filters__filter-input  visually-hidden"
-        type="radio"
-        name="trip-filter"
-        value="${filter.type}"
-        ${(filter.hasPoints) ? '' : 'disabled'}
-      />
-      <label
-        class="trip-filters__filter-label"
-        for="filter-${filter.type}"
-        >
-          ${filter.type}
-        </label>
-    </div>
-  `;
+function createFilterItem(filter, currentFilterType) {
+  const {type, disabled} = filter;
+
+  return (
+    `<div class="trip-filters__filter">
+      <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}"
+      ${type === currentFilterType ? 'checked' : ''} ${disabled ? 'disabled' : ''}>
+      <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
+    </div>`
+  );
 }
 
-const createFilterTemlpate = (filterItems) => {
+const createFilterTemlpate = (filterItems, currentFilterType) => {
   const filterItemsTemplate = filterItems
-    .map((filter, index) => createFilterItem(filter, index === 0))
+    .map((filter) => createFilterItem(filter, currentFilterType))
     .join('');
 
   return (
@@ -33,17 +24,26 @@ const createFilterTemlpate = (filterItems) => {
     </form>`
   );
 };
-
-
 export default class FilterView extends AbstractView {
   #filters = null;
+  #currentFilter = null;
+  #handleFilterTypeChange = null;
 
-  constructor({filters}) {
+  constructor({filters, currentFilterType, onFilterTypeChange}) {
     super();
     this.#filters = filters;
+    this.#currentFilter = currentFilterType;
+    this.#handleFilterTypeChange = onFilterTypeChange;
+
+    this.element.addEventListener('change', this.#filterTypeChangeHandler);
   }
 
   get template() {
-    return createFilterTemlpate(this.#filters);
+    return createFilterTemlpate(this.#filters, this.#currentFilter);
   }
+
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFilterTypeChange(evt.target.value);
+  };
 }

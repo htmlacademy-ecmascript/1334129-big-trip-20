@@ -29,10 +29,7 @@ const createOffersTemplate = (offerData) => {
 
 const createItemTemlpate = (point, endpoint, offerData) => {
   const {type, startDate, endDate, price, isFavorite} = point;
-  // const destinationData = destinations.find((value) => value.id === destination);
-  // console.log(endpoint);
-  // console.log(offerData);
-  const title = `${type} ${endpoint.title}`;
+  const title = endpoint ? `${type} ${endpoint.title}` : '';
 
   return `<li class="trip-events__item">
     <div class="event">

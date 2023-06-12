@@ -24,9 +24,4 @@ const getTimeFromMins = (mins) => {
 
 const getRandomBoolean = () => Math.random() >= 0.5;
 
-
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
-}
-
-export {getRandomArrayElement, getRandomInteger, getTimeFromMins, updateItem, getRandomBoolean};
+export {getRandomArrayElement, getRandomInteger, getTimeFromMins, getRandomBoolean};

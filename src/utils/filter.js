@@ -1,30 +1,17 @@
-import {FilterType} from '../const.js';
-import {isPointPast, isPointFuture, isPointPresent} from './point.js';
+import dayjs from 'dayjs';
+import {FilterType} from '../const';
+
+const ispointFuture = (point) => dayjs().isBefore(point.startDate);
+
+const ispointPresent = (point) => dayjs().isAfter(point.startDate) && dayjs().isBefore(point.endDate);
+
+const ispointPast = (point) => dayjs().isAfter(point.endDate);
 
 const filter = {
-  [FilterType.EVERYTHING]: (events) => [...events],
-  [FilterType.FUTURE]: (events) => events.filter((event) => isPointFuture(event)),
-  [FilterType.PRESENT]: (events) => events.filter((event) => isPointPresent(event)),
-  [FilterType.PAST]: (events) => events.filter((event) => isPointPast(event))
+  [FilterType.EVERYTHING]: (points) => [...points],
+  [FilterType.FUTURE]: (points) => points.filter((point) => ispointFuture(point)),
+  [FilterType.PRESENT]: (points) => points.filter((point) => ispointPresent(point)),
+  [FilterType.PAST]: (points) => points.filter((point) => ispointPast(point))
 };
 
 export {filter};
-
-// import dayjs from 'dayjs';
-// import {FilterType} from '../const';
-
-// const isEventFuture = (event) => dayjs().isBefore(event.startDate);
-
-// const isEventPresent = (event) => dayjs().isAfter(event.startDate) && dayjs().isBefore(event.endDate);
-
-// const isEventPast = (event) => dayjs().isAfter(event.endDate);
-
-
-// const filter = {
-//   [FilterType.EVERYTHING]: (events) => [...events],
-//   [FilterType.FUTURE]: (events) => events.filter((event) => isEventFuture(event)),
-//   [FilterType.PRESENT]: (events) => events.filter((event) => isEventPresent(event)),
-//   [FilterType.PAST]: (events) => events.filter((event) => isEventPast(event))
-// };
-
-// export {filter};
